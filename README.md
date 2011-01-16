@@ -3,7 +3,7 @@ JonesForth Macintel
 
 About
 -----
-This is the port of [JonesForth](http://www.annexia.org/forth) to Macintosh Intel (32-bit). JonesForth is a Public Domain implementation of [FORTH](http://www.forth.org/) language/environment/machine.
+This is the port of [JonesForth](http://www.annexia.org/forth) to Macintosh Intel (32-bit). JonesForth is a Public Domain implementation of [FORTH](http://www.murphywong.net/hello/simple.htm) language/environment/machine.
 
 Compiling
 ---------
