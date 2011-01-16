@@ -1,11 +1,11 @@
-all: jones
+all: jonesforth
 
-jones.o: jonesforth-macintel.s
-	gcc -E jonesforth-macintel.s > jones.s
-	as -g jones.s -o jones.o
+jonesforth.o: jonesforth-macintel.s
+	gcc -E jonesforth-macintel.s > jonesforth.s
+	as -arch i386 -g jonesforth.s -o jonesforth.o
 
-jones: jones.o
-	ld jones.o -o jones
+jonesforth: jonesforth.o
+	ld -arch i386 jonesforth.o -o jonesforth
 
 clean:
-	rm -f jones.o jones.s jones
+	rm -f jonesforth.o jonesforth.s jonesforth
