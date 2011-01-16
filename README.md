@@ -1,4 +1,4 @@
-JonesForth Macintel
+JonesForth MacIntel
 ===================
 
 About
@@ -11,7 +11,7 @@ Use GCC in 32-bit model (-m32), like:
 
     $ gcc -m32 -nostdlib jonesforth-macintel.s -o jonesforth
 
-If you want to compile with debug information, I recomend to use the makefile `jonesforth.mk`.
+If you want to compile with debug information, I recommend to use the makefile `jonesforth.mk`.
 
     $ make -f jonesforh.mk
 
