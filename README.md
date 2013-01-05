@@ -14,7 +14,7 @@ But if you want to compile the interpreter with debug information:
 
     $ make jonesforth
 
-This software is now to work on Snow Leopard, Lion and Mountain Lion.
+This software is know to work on Snow Leopard, Lion and Mountain Lion.
 
 Running FORTH
 -------------
