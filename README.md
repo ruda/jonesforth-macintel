@@ -1,30 +1,28 @@
 JonesForth MacIntel
 ===================
 
-About
------
-This is the port of [JonesForth](http://www.annexia.org/forth) to Macintosh Intel (32-bit). JonesForth is a Public Domain implementation of [FORTH](http://www.murphywong.net/hello/simple.htm) language/environment/machine.
+JonesForth is a Public Domain implementation of FORTH language/environment/machine. JonesForth MacIntel is the port of JonesForth to Macintosh Intel (32-bit).
 
-Compiling
----------
-Use GCC in 32-bit model (-m32), like:
+How to build
+------------
 
-    $ gcc -m32 -nostdlib jonesforth-macintel.s -o jonesforth
+Use GCC in 32-bit model:
 
-If you want to compile with debug information, I recommend to use the makefile `jonesforth.mk`.
+    $ gcc -m32 -nostdlib -static jonesforth-macintel.s -o jonesforth
 
-    $ make -f jonesforh.mk
+But if you want to compile the interpreter with debug information:
 
-Running
--------
-Pass `jonesforth.f` which contains procedures written in FORTH with STDIN to read your input, to the interpreter. Note the interpreter don't accept parameters.
+    $ make jonesforth
+
+This software is now to work on Snow Leopard, Lion and Mountain Lion.
+
+Running FORTH
+-------------
+
+JonesForth requires extra FORTH definitions stored in `jonesforth.f`, so pass `jonesforth.f` and the standard input (STDIN) to the interpreter. Note: the interpreter don't accept parameters.
 
     $ cat jonesforth.f - | ./jonesforth 
     JONESFORTH VERSION 47 
     OK 
 
-If you want to exit from the interpreter, the command is `BYE`.
-   
-License
--------
-Public Domain.
+To exit from FORTH, type `BYE` command.

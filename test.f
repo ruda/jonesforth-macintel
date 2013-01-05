@@ -1,0 +1,3 @@
+." Hello JonesForth!"
+CR
+BYE
