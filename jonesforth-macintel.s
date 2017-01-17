@@ -217,7 +217,7 @@ code_$3 :			// assembler code follows
 	pushl %eax
 	NEXT
 
-	defcode "<",1,0,LT,name_NEQU
+	defcode "<",1,0,_LT,name_NEQU
 	pop %eax
 	pop %ebx
 	cmp %eax,%ebx
@@ -226,7 +226,7 @@ code_$3 :			// assembler code follows
 	pushl %eax
 	NEXT
 
-	defcode ">",1,0,GT,name_LT
+	defcode ">",1,0,GT,name__LT
 	pop %eax
 	pop %ebx
 	cmp %eax,%ebx
@@ -235,7 +235,7 @@ code_$3 :			// assembler code follows
 	pushl %eax
 	NEXT
 
-	defcode "<=",2,0,LE,name_GT
+	defcode "<=",2,0,_LE,name_GT
 	pop %eax
 	pop %ebx
 	cmp %eax,%ebx
@@ -244,7 +244,7 @@ code_$3 :			// assembler code follows
 	pushl %eax
 	NEXT
 
-	defcode ">=",2,0,GE,name_LE
+	defcode ">=",2,0,GE,name__LE
 	pop %eax
 	pop %ebx
 	cmp %eax,%ebx
@@ -324,7 +324,7 @@ code_$3 :			// assembler code follows
 	POPRSP %esi		// pop return stack into %esi
 	NEXT
 
-	defcode "LIT",3,0,LIT,name_EXIT
+	defcode "LIT",3,0,_LIT,name_EXIT
 	// %esi points to the next command, but in this case it points to the next
 	// literal 32 bit integer.  Get that literal into %eax and increment %esi.
 	// On x86, it's a convenient single byte instruction!  (cf. NEXT macro)
@@ -332,7 +332,7 @@ code_$3 :			// assembler code follows
 	push %eax		// push the literal number on to stack
 	NEXT
 
-	defcode "!",1,0,STORE,name_LIT
+	defcode "!",1,0,STORE,name__LIT
 	pop %ebx		// address to store at
 	pop %eax		// data to store there
 	mov %eax,(%ebx)		// store it
@@ -399,8 +399,8 @@ var_$3 :
 
 	defvar "STATE",5,0,STATE,name_CMOVE,0
 	defvar "HERE",4,0,HERE,name_STATE,user_defs_start
-	defvar "LATEST",6,0,LATEST,name_HERE,name_SYSCALL // SYSCALL must be last in built-in dictionary
-	defvar "S0",2,0,SZ,name_LATEST,0
+	defvar "LATEST",6,0,_LATEST,name_HERE,name_SYSCALL // SYSCALL must be last in built-in dictionary
+	defvar "S0",2,0,SZ,name__LATEST,0
 	defvar "BASE",4,0,BASE,name_SZ,10
 
 
@@ -646,7 +646,7 @@ _FIND:
 	push %esi		// Save %esi so we can use it in string comparison.
 
 	// Now we start searching backwards through the dictionary for this word.
-	mov var_LATEST,%edx	// LATEST points to name header of the latest word in the dictionary
+	mov var__LATEST,%edx	// LATEST points to name header of the latest word in the dictionary
 1:	test %edx,%edx		// NULL pointer?  (end of the linked list)
 	je 4f
 
@@ -709,7 +709,7 @@ _TCFA:
 
 	// Link pointer.
 	movl var_HERE,%edi	// %edi is the address of the header
-	movl var_LATEST,%eax	// Get link pointer
+	movl var__LATEST,%eax	// Get link pointer
 	stosl			// and store it in the header.
 
 	// Length byte and the word itself.
@@ -724,7 +724,7 @@ _TCFA:
 
 	// Update LATEST and HERE.
 	movl var_HERE,%eax
-	movl %eax,var_LATEST
+	movl %eax,var__LATEST
 	movl %edi,var_HERE
 	NEXT
 
@@ -738,31 +738,31 @@ _COMMA:
 	movl %edi,var_HERE	// Update HERE (incremented)
 	ret
 
-	defcode "[",1,F_IMMED,LBRAC,name_COMMA
+	defcode "[",1,F_IMMED,_LBRAC,name_COMMA
 	xor %eax,%eax
 	movl %eax,var_STATE	// Set STATE to 0.
 	NEXT
 
-	defcode "]",1,0,RBRAC,name_LBRAC
+	defcode "]",1,0,RBRAC,name__LBRAC
 	movl $1,var_STATE	// Set STATE to 1.
 	NEXT
 
 	defword ":",1,0,COLON,name_RBRAC
 	.long WORD		// Get the name of the new word
 	.long CREATE		// CREATE the dictionary entry / header
-	.long LIT, DOCOL, COMMA	// Append DOCOL  (the codeword).
-	.long LATEST, FETCH, HIDDEN // Make the word hidden (see below for definition).
+	.long _LIT, DOCOL, COMMA	// Append DOCOL  (the codeword).
+	.long _LATEST, FETCH, HIDDEN // Make the word hidden (see below for definition).
 	.long RBRAC		// Go into compile mode.
 	.long EXIT		// Return from the function.
 
 	defword "\073",1,F_IMMED,SEMICOLON,name_COLON
-	.long LIT, EXIT, COMMA	// Append EXIT (so the word will return).
-	.long LATEST, FETCH, HIDDEN // Toggle hidden flag -- unhide the word (see below for definition).
-	.long LBRAC		// Go back to IMMEDIATE mode.
+	.long _LIT, EXIT, COMMA	// Append EXIT (so the word will return).
+	.long _LATEST, FETCH, HIDDEN // Toggle hidden flag -- unhide the word (see below for definition).
+	.long _LBRAC		// Go back to IMMEDIATE mode.
 	.long EXIT		// Return from the function.
 
 	defcode "IMMEDIATE",9,F_IMMED,IMMEDIATE,name_SEMICOLON
-	movl var_LATEST,%edi	// LATEST word.
+	movl var__LATEST,%edi	// LATEST word.
 	addl $4,%edi		// Point to name/flags byte.
 	xorb $F_IMMED,(%edi)	// Toggle the IMMED bit.
 	NEXT
@@ -795,7 +795,7 @@ _COMMA:
 	lodsl			// otherwise we need to skip the offset
 	NEXT
 
-	defcode "LITSTRING",9,0,LITSTRING,name_ZBRANCH
+	defcode "LITSTRING",9,0,_LITSTRING,name_ZBRANCH
 	lodsl			// get the length of the string
 	push %esi		// push the address of the start of the string
 	push %eax		// push it on the stack
@@ -804,7 +804,7 @@ _COMMA:
 	andl $~3,%esi
 	NEXT
 
-	defcode "TELL",4,0,TELL,name_LITSTRING
+	defcode "TELL",4,0,TELL,name__LITSTRING
 	mov $1,%ebx		// 1st param: stdout
 	pop %edx		// 3rd param: length of string
 	pop %ecx		// 2nd param: address of string
@@ -850,7 +850,7 @@ _COMMA:
 	test %ecx,%ecx
 	jnz 6f
 	mov %eax,%ebx
-	mov $LIT,%eax		// The word is LIT
+	mov $_LIT,%eax		// The word is LIT
 
 2:	// Are we compiling or executing?
 	movl var_STATE,%edx

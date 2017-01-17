@@ -1,0 +1,4 @@
+#! /bin/bash
+
+cat jonesforth.f - | ./jonesforth
+

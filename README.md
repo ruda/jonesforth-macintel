@@ -25,4 +25,10 @@ JonesForth requires extra FORTH definitions stored in `jonesforth.f`, so pass `j
     JONESFORTH VERSION 47 
     OK 
 
+Or alternatively:
+
+    $ ./run
+    JONESFORTH VERSION 47 
+    OK 
+
 To exit from FORTH, type `BYE` command.
